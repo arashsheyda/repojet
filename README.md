@@ -12,12 +12,12 @@ Search repositories across multiple GitHub organizations directly from Raycast.
     <td><img src="docs/welcome-setup-page.png" alt="Welcome Setup Page" /></td>
   </tr>
   <tr>
-    <td><img src="docs/invalid-token-page.png" alt="Invalid Token Page" /></td>
+    <td><img src="docs/raycast-commands-page.png" alt="Raycast Commands" /></td>
     <td><img src="docs/repo-list-page.png" alt="Repository List" /></td>
   </tr>
   <tr>
     <td><img src="docs/repo-list-searched-page.png" alt="Search Results" /></td>
-    <td><img src="docs/raycast-commands-page.png" alt="Raycast Commands" /></td>
+   <td><img src="docs/invalid-token-page.png" alt="Invalid Token Page" /></td>
   </tr>
   <tr>
     <td><img src="docs/not-found-page.png" alt="No Results Found" /></td>
