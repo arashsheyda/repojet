@@ -1,6 +1,5 @@
 import { useFetch } from '@raycast/utils'
 import type { PreferencesState, GithubRepository } from '../types'
-import stripAnsi from 'strip-ansi'
 
 /**
  * Checks the validity and scopes of a GitHub token.
@@ -50,13 +49,7 @@ export function useGithubRepos(query: string, preferences: PreferencesState) {
 
   const fullQuery = buildQuery(query)
 
-  console.log(
-    stripAnsi(
-      `https://api.github.com/search/repositories?q=${encodeURIComponent(fullQuery)}&sort=stars&order=desc&per_page=30`,
-    ),
-  )
-
-  const { data, isLoading } = useFetch<GithubRepository[]>(
+  const { data, isLoading, error } = useFetch<GithubRepository[]>(
     `https://api.github.com/search/repositories?q=${encodeURIComponent(fullQuery)}&sort=stars&order=desc&per_page=30`,
     {
       execute: Boolean(fullQuery),
@@ -79,5 +72,5 @@ export function useGithubRepos(query: string, preferences: PreferencesState) {
     },
   )
 
-  return { repositories: data || [], isLoading }
+  return { repositories: data || [], isLoading, error }
 }

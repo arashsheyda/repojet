@@ -1,4 +1,4 @@
-import { List, Detail, getPreferenceValues } from '@raycast/api'
+import { List, Detail, getPreferenceValues, Icon, Color } from '@raycast/api'
 import { useEffect, useState } from 'react'
 
 import type { PreferencesState } from './types'
@@ -29,7 +29,7 @@ export default function SearchRepositories() {
     validateToken()
   }, [preferences.githubToken])
 
-  const { repositories, isLoading } = useGithubRepos(searchText, preferences)
+  const { repositories, isLoading, error } = useGithubRepos(searchText, preferences)
 
   // TODO: move to components
   if (!preferences.githubToken || orgs.length === 0) {
@@ -70,7 +70,11 @@ For security reasons, please create a new **read-only token** with only the \`re
       throttle
     >
       {repositories.length === 0 && !isLoading ? (
-        <List.EmptyView title="No repositories found" />
+        <List.EmptyView 
+          title={error ? 'Error Loading Repositories' : 'No repositories found'}
+          description={error ? `Failed to fetch repositories: ${error.message}` : undefined}
+          icon={error ? { source: Icon.Warning, tintColor: Color.Orange } : undefined}
+        />
       ) : (
         repositories.map((repo) => <RepositoryListItem key={repo.id} repo={repo} />)
       )}
