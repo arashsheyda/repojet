@@ -4,6 +4,27 @@ Search repositories across multiple GitHub organizations directly from Raycast.
 
 !IMPORTANT: the PAT is only working for 1 org so we need to refactor and go with "GitHub App"
 
+## Screenshots
+
+<table>
+  <tr>
+    <td><img src="docs/welcome-page.png" alt="Welcome Page" /></td>
+    <td><img src="docs/welcome-setup-page.png" alt="Welcome Setup Page" /></td>
+  </tr>
+  <tr>
+    <td><img src="docs/invalid-token-page.png" alt="Invalid Token Page" /></td>
+    <td><img src="docs/repo-list-page.png" alt="Repository List" /></td>
+  </tr>
+  <tr>
+    <td><img src="docs/repo-list-searched-page.png" alt="Search Results" /></td>
+    <td><img src="docs/raycast-commands-page.png" alt="Raycast Commands" /></td>
+  </tr>
+  <tr>
+    <td><img src="docs/not-found-page.png" alt="No Results Found" /></td>
+    <td><img src="docs/error-page.png" alt="Error Page" /></td>
+  </tr>
+</table>
+
 ## Features
 
 - Search repositories across multiple GitHub organizations
