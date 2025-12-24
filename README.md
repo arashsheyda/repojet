@@ -8,11 +8,11 @@ Search repositories across multiple GitHub organizations directly from Raycast.
 
 <table>
   <tr>
+    <td><img src="docs/raycast-commands-page.png" alt="Raycast Commands" /></td>
     <td><img src="docs/welcome-page.png" alt="Welcome Page" /></td>
-    <td><img src="docs/welcome-setup-page.png" alt="Welcome Setup Page" /></td>
   </tr>
   <tr>
-    <td><img src="docs/raycast-commands-page.png" alt="Raycast Commands" /></td>
+    <td><img src="docs/welcome-setup-page.png" alt="Welcome Setup Page" /></td>
     <td><img src="docs/repo-list-page.png" alt="Repository List" /></td>
   </tr>
   <tr>
