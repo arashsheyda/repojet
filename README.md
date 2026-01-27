@@ -25,10 +25,13 @@ Search repositories across multiple GitHub organizations directly from Raycast.
 
 ## Features
 
-- Search repositories across multiple GitHub organizations
+- **Search repositories** across multiple GitHub organizations
+- **Bookmark repositories** to keep them at the top of your list
+- **Clone repositories** directly to your local machine with one command
+- **Customizable clone directory** - choose where repos are cloned
 - Support for private repositories with GitHub Personal Access Token
 - Real-time search with instant results
-- Quick access to repository URLs
+- Quick access to repository URLs and clone commands
 
 ## Setup
 
@@ -67,6 +70,9 @@ To access private repositories and increase API rate limits:
 5. Paste your GitHub token in "GitHub Personal Access Token"
 6. Enter your organization names (comma-separated) in "GitHub Organizations"
    - Example: `myorg1, myorg2, personal-org`
+7. (Optional) Set your preferred "Clone Directory" for cloning repositories
+   - Default: `~/Developer`
+   - You can use paths like `~/Projects`, `~/Code`, or any absolute path
 
 ### 4. Start Searching
 
@@ -82,8 +88,21 @@ Search for repositories by name, description, or language!
    - Star count
    - Programming language
    - Privacy status (if private)
-5. Press Enter to open in browser
-6. Press ⌘C to copy the repository URL
+   - Bookmark indicator (yellow star) for bookmarked repos
+5. Available actions:
+   - **Enter** - Open repository in browser
+   - **⌘D** - Clone repository to your configured directory
+   - **⌘B** - Bookmark/unbookmark repository (bookmarked repos stay at the top)
+   - **⌘C** - Copy repository URL
+   - **⌘⇧C** - Copy git clone URL
+
+## Keyboard Shortcuts
+
+- **⌘D** - Clone repository to local machine
+- **⌘B** - Toggle bookmark (keeps repos at the top)
+- **⌘C** - Copy repository URL
+- **⌘⇧C** - Copy git clone URL
+- **⌘,** - Open preferences
 
 ## Authentication
 
