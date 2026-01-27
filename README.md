@@ -2,8 +2,6 @@
 
 Search repositories across multiple GitHub organizations directly from Raycast.
 
-!IMPORTANT: the PAT is only working for 1 org so we need to refactor and go with "GitHub App"
-
 ## Screenshots
 
 <table>
