@@ -5,6 +5,12 @@ export interface PreferencesState {
   organizations: string
 }
 
+export interface RepositoryListItemProps {
+  repo: GithubRepository
+  isBookmarked: boolean
+  onToggleBookmark: (repoId: number) => void
+}
+
 // auto-generated from GitHub API response
 export interface GithubRepository {
   id: number

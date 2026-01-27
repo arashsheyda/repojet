@@ -1,7 +1,7 @@
 import { List, Action, ActionPanel, Icon, openExtensionPreferences, Image, Color } from '@raycast/api'
-import type { GithubRepository } from '../types'
+import type { RepositoryListItemProps } from '../types'
 
-export default function RepositoryListItem({ repo }: { repo: GithubRepository }) {
+export default function RepositoryListItem({ repo, isBookmarked, onToggleBookmark }: RepositoryListItemProps) {
   return (
     <List.Item
       key={repo.id}
@@ -10,6 +10,7 @@ export default function RepositoryListItem({ repo }: { repo: GithubRepository })
       icon={{ source: repo.owner.avatar_url, mask: Image.Mask.RoundedRectangle, tooltip: `@${repo.owner.login}` }}
       accessories={
         [
+          isBookmarked && { icon: { source: Icon.Star, tintColor: Color.Yellow }, tooltip: 'Bookmarked' },
           repo.language && { text: repo.language, tooltip: 'Language' },
           { icon: Icon.Calendar, tooltip: `Last Updated: ${new Date(repo.updated_at).toLocaleString()}` },
           { text: `${repo.stargazers_count}`, tooltip: 'Stars', icon: Icon.Star },
@@ -23,6 +24,12 @@ export default function RepositoryListItem({ repo }: { repo: GithubRepository })
           <ActionPanel.Section>
             <Action.OpenInBrowser url={repo.html_url} title="Open in Browser" />
             <Action.CopyToClipboard content={repo.html_url} title="Copy URL" />
+            <Action
+              title={isBookmarked ? 'Remove Bookmark' : 'Add Bookmark'}
+              icon={isBookmarked ? Icon.StarDisabled : Icon.Star}
+              onAction={() => onToggleBookmark(repo.id)}
+              shortcut={{ modifiers: ['cmd'], key: 'b' }}
+            />
           </ActionPanel.Section>
           <ActionPanel.Section>
             <Action title="Open Preferences" onAction={openExtensionPreferences} />
