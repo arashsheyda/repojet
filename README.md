@@ -20,63 +20,63 @@ Search repositories across multiple GitHub organizations directly from Raycast.
 
 <table>
   <tr>
-    <td align="center">
-      <img src="assets/icon.png" alt="RepoJet Icon" /><br/>
+    <td align="center" style="background-color: #23272D;">
+      <img src="assets/icon.png" alt="RepoJet Icon" height="400" /><br/>
       <em>RepoJet</em>
     </td>
-    <td align="center">
+    <td align="center" style="background-color: #23272D;">
       <img src="docs/raycast-commands-page.png" alt="Raycast Commands" /><br/>
-      <em>Finding the extension in Raycast</em>
+      <em>Finding the extension</em>
     </td>
   </tr>
   <tr>
-    <td align="center">
+    <td align="center" style="background-color: #23272D;">
       <img src="docs/welcome-page.png" alt="Welcome Page" /><br/>
-      <em>Initial setup prompt when first launching</em>
+      <em>Initial setup</em>
     </td>
-    <td align="center">
+    <td align="center" style="background-color: #23272D;">
       <img src="docs/welcome-setup-page.png" alt="Welcome Setup Page" /><br/>
-      <em>Configuration form with GitHub token, organizations, and clone directory</em>
+      <em>Configuration</em>
     </td>
   </tr>
   <tr>
-    <td align="center">
+    <td align="center" style="background-color: #23272D;">
       <img src="docs/repo-list-page.png" alt="Repository List" /><br/>
-      <em>Browse all repositories across your organizations</em>
+      <em>Repository list</em>
     </td>
-    <td align="center">
+    <td align="center" style="background-color: #23272D;">
       <img src="docs/repo-list-searched-page.png" alt="Search Results" /><br/>
-      <em>Real-time search filtering repositories</em>
+      <em>Search results</em>
     </td>
   </tr>
   <tr>
-    <td align="center">
+    <td align="center" style="background-color: #23272D;">
       <img src="docs/repo-list-page-bookmarked.png" alt="Bookmarked Repositories" /><br/>
-      <em>Bookmarked repositories appear at the top with a yellow star</em>
+      <em>Bookmarked repos</em>
     </td>
-    <td align="center">
+    <td align="center" style="background-color: #23272D;">
       <img src="docs/repo-list-actions.png" alt="Repository Actions" /><br/>
-      <em>Available actions: open in browser, clone, copy URLs, and bookmark</em>
+      <em>Actions menu</em>
     </td>
   </tr>
   <tr>
-    <td align="center">
+    <td align="center" style="background-color: #23272D;">
       <img src="docs/repo-list-cloned.png" alt="Clone Repository" /><br/>
-      <em>Success notification after cloning with quick access options</em>
+      <em>Clone success</em>
     </td>
-    <td align="center">
+    <td align="center" style="background-color: #23272D;">
       <img src="docs/invalid-token-page.png" alt="Invalid Token Page" /><br/>
-      <em>Token validation error with helpful troubleshooting info</em>
+      <em>Invalid token</em>
     </td>
   </tr>
   <tr>
-    <td align="center">
+    <td align="center" style="background-color: #23272D;">
       <img src="docs/not-result.png" alt="No Results" /><br/>
-      <em>Empty state when no repositories match your search</em>
+      <em>No results</em>
     </td>
-    <td align="center">
+    <td align="center" style="background-color: #23272D;">
       <img src="docs/error-page.png" alt="Error Page" /><br/>
-      <em>Error state with guidance on resolving issues</em>
+      <em>Error state</em>
     </td>
   </tr>
 </table>
