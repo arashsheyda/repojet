@@ -15,11 +15,19 @@ Search repositories across multiple GitHub organizations directly from Raycast.
   </tr>
   <tr>
     <td><img src="docs/repo-list-searched-page.png" alt="Search Results" /></td>
-   <td><img src="docs/invalid-token-page.png" alt="Invalid Token Page" /></td>
+    <td><img src="docs/repo-list-page-bookmarked.png" alt="Bookmarked Repositories" /></td>
   </tr>
   <tr>
-    <td><img src="docs/not-found-page.png" alt="No Results Found" /></td>
+    <td><img src="docs/repo-list-actions.png" alt="Repository Actions" /></td>
+    <td><img src="docs/repo-list-cloned.png" alt="Clone Repository" /></td>
+  </tr>
+  <tr>
+    <td><img src="docs/invalid-token-page.png" alt="Invalid Token Page" /></td>
+    <td><img src="docs/not-result.png" alt="No Results" /></td>
+  </tr>
+  <tr>
     <td><img src="docs/error-page.png" alt="Error Page" /></td>
+    <td><img src="assets/icon.png" alt="RepoJet Icon" /></td>
   </tr>
 </table>
 
