@@ -1,4 +1,4 @@
-# Kong Ray
+# RepoJet
 
 Search repositories across multiple GitHub organizations directly from Raycast.
 
@@ -45,7 +45,7 @@ To access private repositories and increase API rate limits:
 
 1. Go to [GitHub Settings > Developer settings > Personal access tokens > Tokens (classic)](https://github.com/settings/tokens)
 2. Click "Generate new token (classic)"
-3. Give it a descriptive name like "Raycast Kong Extension"
+3. Give it a descriptive name like "Raycast RepoJet Extension"
 4. Select the `repo` scope, this grants:
    - Full control of private repositories (read access)
    - Access to repository metadata

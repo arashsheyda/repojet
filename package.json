@@ -1,7 +1,7 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "kong-ray",
-  "title": "Kong Ray",
+  "name": "repojet",
+  "title": "RepoJet",
   "description": "Search Kong repositories across GitHub organizations from Raycast",
   "icon": "icon.png",
   "author": "arashsheyda",
@@ -19,8 +19,8 @@
     {
       "name": "search-repos",
       "title": "Search Repositories",
-      "subtitle": "Search Kong repositories across GitHub organizations",
-      "description": "Search Kong repositories across GitHub organizations directly from Raycast.",
+      "subtitle": "Search repositories across multiple GitHub organizations",
+      "description": "Search repositories across multiple GitHub organizations directly from Raycast.",
       "mode": "view"
     }
   ],
@@ -28,16 +28,16 @@
     {
       "name": "githubToken",
       "title": "GitHub Personal Access Token",
-      "description": "Token with access to Kong repositories (read-only is enough)",
+      "description": "Token with access to repositories (read-only is enough)",
       "type": "password",
       "required": true
     },
     {
       "name": "organizations",
       "title": "GitHub Organizations",
-      "description": "GitHub organizations to search (e.g. kong, kong-konnect)",
+      "description": "GitHub organizations to search (e.g. org1, org2)",
       "type": "textfield",
-      "default": "kong, kong-konnect",
+      "default": "",
       "required": true
     },
     {
