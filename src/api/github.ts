@@ -56,10 +56,13 @@ export function useGithubRepos(query: string, preferences: PreferencesState) {
 
   const fullQuery = buildQuery(query);
 
+  // Don't execute if query is empty or only whitespace
+  const shouldExecute = Boolean(fullQuery && fullQuery.trim());
+
   const { data, isLoading, error } = useFetch<GithubRepository[]>(
     `https://api.github.com/search/repositories?q=${encodeURIComponent(fullQuery)}&sort=stars&order=desc&per_page=30`,
     {
-      execute: Boolean(fullQuery),
+      execute: shouldExecute,
       headers: {
         Accept: "application/vnd.github.v3+json",
         ...(preferences.githubToken
