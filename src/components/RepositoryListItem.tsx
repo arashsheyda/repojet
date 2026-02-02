@@ -9,20 +9,72 @@ import {
   showToast,
   Toast,
   open,
+  Form,
+  useNavigation,
 } from "@raycast/api";
 import { homedir } from "os";
 import { join } from "path";
 import { exec } from "child_process";
 import { promisify } from "util";
+import { useState } from "react";
 import type { RepositoryListItemProps } from "../types";
 
 const execAsync = promisify(exec);
+
+function SetAliasForm({
+  repoId,
+  repoFullName,
+  currentAlias,
+  onSetAlias,
+}: {
+  repoId: number;
+  repoFullName: string;
+  currentAlias?: string;
+  onSetAlias: (repoId: number, repoFullName: string, alias: string) => void;
+}) {
+  const { pop } = useNavigation();
+  const [alias, setAlias] = useState(currentAlias || "");
+
+  const handleSubmit = async () => {
+    if (alias.trim()) {
+      onSetAlias(repoId, repoFullName, alias.trim());
+      await showToast({
+        style: Toast.Style.Success,
+        title: "Alias set successfully",
+        message: `"${alias.trim()}" → ${repoFullName}`,
+      });
+      pop();
+    }
+  };
+
+  return (
+    <Form
+      actions={
+        <ActionPanel>
+          <Action.SubmitForm title="Set Alias" onSubmit={handleSubmit} />
+        </ActionPanel>
+      }
+    >
+      <Form.TextField
+        id="alias"
+        title="Alias"
+        placeholder="e.g., gh"
+        value={alias}
+        onChange={setAlias}
+        info={`Set a short alias for ${repoFullName}`}
+      />
+    </Form>
+  );
+}
 
 export default function RepositoryListItem({
   repo,
   isBookmarked,
   onToggleBookmark,
   cloneDirectory,
+  alias,
+  onSetAlias,
+  onRemoveAlias,
 }: RepositoryListItemProps) {
   const handleClone = async () => {
     const toast = await showToast({
@@ -39,7 +91,7 @@ export default function RepositoryListItem({
       const repoPath = join(cloneDir, repo.name);
 
       // Clone the repository
-      await execAsync(`git clone ${repo.clone_url} "${repoPath}"`);
+      await execAsync(`git clone "${repo.clone_url}" "${repoPath}"`);
 
       toast.style = Toast.Style.Success;
       toast.title = "Repository cloned successfully";
@@ -73,6 +125,10 @@ export default function RepositoryListItem({
           isBookmarked && {
             icon: { source: Icon.Star, tintColor: Color.Yellow },
             tooltip: "Bookmarked",
+          },
+          alias && {
+            tag: { value: alias, color: Color.Purple },
+            tooltip: `Alias: ${alias}`,
           },
           repo.language && { text: repo.language, tooltip: "Language" },
           {
@@ -117,6 +173,35 @@ export default function RepositoryListItem({
               onAction={() => onToggleBookmark(repo.id)}
               shortcut={{ modifiers: ["cmd"], key: "b" }}
             />
+            <Action.Push
+              title={alias ? "Edit Alias" : "Set Alias"}
+              icon={Icon.Pencil}
+              target={
+                <SetAliasForm
+                  repoId={repo.id}
+                  repoFullName={repo.full_name}
+                  currentAlias={alias}
+                  onSetAlias={onSetAlias}
+                />
+              }
+              shortcut={{ modifiers: ["cmd"], key: "l" }}
+            />
+            {alias && (
+              <Action
+                title="Remove Alias"
+                icon={Icon.Trash}
+                style={Action.Style.Destructive}
+                onAction={async () => {
+                  onRemoveAlias(repo.id);
+                  await showToast({
+                    style: Toast.Style.Success,
+                    title: "Alias removed",
+                    message: `Removed alias "${alias}" from ${repo.full_name}`,
+                  });
+                }}
+                shortcut={{ modifiers: ["cmd", "shift"], key: "l" }}
+              />
+            )}
           </ActionPanel.Section>
           <ActionPanel.Section>
             <Action

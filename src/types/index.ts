@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-export interface PreferencesState {
-  githubToken: string;
-  organizations: string;
-  cloneDirectory?: string;
+export interface RepoAlias {
+  repoId: number;
+  repoFullName: string;
+  alias: string;
 }
 
 export interface RepositoryListItemProps {
@@ -11,6 +10,9 @@ export interface RepositoryListItemProps {
   isBookmarked: boolean;
   onToggleBookmark: (repoId: number) => void;
   cloneDirectory?: string;
+  alias?: string;
+  onSetAlias: (repoId: number, repoFullName: string, alias: string) => void;
+  onRemoveAlias: (repoId: number) => void;
 }
 
 // auto-generated from GitHub API response

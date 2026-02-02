@@ -1,5 +1,5 @@
 import { useFetch } from "@raycast/utils";
-import type { PreferencesState, GithubRepository } from "../types";
+import type { GithubRepository, RepoAlias } from "../types";
 
 /**
  * Checks the validity and scopes of a GitHub token.
@@ -38,7 +38,11 @@ export async function checkTokenScopes(
   }
 }
 
-export function useGithubRepos(query: string, preferences: PreferencesState) {
+export function useGithubRepos(
+  query: string, 
+  preferences: Preferences,
+  aliases?: Map<number, RepoAlias>
+) {
   const orgs = preferences.organizations
     .split(",")
     .map((org) => org.trim())
@@ -50,6 +54,24 @@ export function useGithubRepos(query: string, preferences: PreferencesState) {
     const orgQueries = orgs.map((org) => `org:${org}`).join(" ");
 
     if (!trimmed || trimmed === "*") return orgQueries;
+
+    // Check if the search text matches any aliases
+    if (aliases) {
+      const matchingRepoNames: string[] = [];
+      const lowerQuery = trimmed.toLowerCase();
+      
+      for (const aliasData of aliases.values()) {
+        if (aliasData.alias.toLowerCase().includes(lowerQuery)) {
+          matchingRepoNames.push(aliasData.repoFullName);
+        }
+      }
+      
+      // If we found matching aliases, search for those repo names
+      if (matchingRepoNames.length > 0) {
+        const repoQueries = matchingRepoNames.map(fullName => `repo:${fullName}`).join(' ');
+        return repoQueries;
+      }
+    }
 
     return [trimmed, orgQueries].filter(Boolean).join(" ");
   };

@@ -10,6 +10,7 @@ Search repositories across multiple GitHub organizations directly from Raycast.
   - [3. Add Organizations](#3-add-organizations)
   - [4. Start Searching](#4-start-searching)
 - [Usage](#usage)
+- [Repository Aliases](#repository-aliases)
 - [Keyboard Shortcuts](#keyboard-shortcuts)
 - [Authentication](#authentication)
 - [Example Queries](#example-queries)
@@ -85,6 +86,7 @@ Search repositories across multiple GitHub organizations directly from Raycast.
 
 - **Search repositories** across multiple GitHub organizations
 - **Bookmark repositories** to keep them at the top of your list
+- **Repository aliases** - set custom short names for quick access (e.g., "gh" for "your-github-repository-with-a-long-name")
 - **Clone repositories** directly to your local machine with one command
 - **Customizable clone directory** - choose where repos are cloned
 - Support for private repositories with GitHub Personal Access Token
@@ -140,24 +142,54 @@ Search for repositories by name, description, or language!
 
 1. Open Raycast (default: `⌘Space`)
 2. Type "Search Repositories" and hit Enter
-3. Type to search (e.g., "react", "api", "database")
+3. Type to search (e.g., "react", "api", "database", or your custom aliases)
 4. Results show:
    - Repository name and description
    - Star count
    - Programming language
    - Privacy status (if private)
    - Bookmark indicator (yellow star) for bookmarked repos
+   - Alias badge (purple tag) if you've set a custom alias
 5. Available actions:
    - **Enter** - Open repository in browser
    - **⌘D** - Clone repository to your configured directory
    - **⌘B** - Bookmark/unbookmark repository (bookmarked repos stay at the top)
+   - **⌘L** - Set or edit repository alias
+   - **⌘⇧L** - Remove repository alias
    - **⌘C** - Copy repository URL
    - **⌘⇧C** - Copy git clone URL
+
+## Repository Aliases
+
+Create custom short names for repositories to find them quickly:
+
+### Setting an Alias
+1. Find the repository you want to alias
+2. Press **⌘L** or select "Set Alias" from the actions menu
+3. Enter a short name (e.g., "lln" for "long-long-name")
+4. Press Enter to save
+
+### Using an Alias
+Simply type the alias in the search bar. The repository will be found and prioritized in the results.
+
+**Example:**
+- Repository: `my-organization/very-long-repository-name`
+- Set alias: `vlrn`
+- Search: Type `vlrn` to quickly find this repo
+
+### Managing Aliases
+- **Edit**: Press **⌘L** on a repository with an existing alias to change it
+- **Remove**: Press **⌘⇧L** to delete the alias
+- **Visual indicator**: Repositories with aliases show a purple badge with the alias name
+
+Aliases are stored locally and work offline. They complement bookmarks by providing quick text-based access.
 
 ## Keyboard Shortcuts
 
 - **⌘D** - Clone repository to local machine
 - **⌘B** - Toggle bookmark (keeps repos at the top)
+- **⌘L** - Set or edit repository alias
+- **⌘⇧L** - Remove repository alias
 - **⌘C** - Copy repository URL
 - **⌘⇧C** - Copy git clone URL
 - **⌘,** - Open preferences
@@ -181,6 +213,7 @@ The extension uses GitHub's REST API v3. Authentication is optional but recommen
 - `language:python` - Find Python repositories
 - `stars:>1000` - Find popular repositories
 - `is:private` - Find private repositories (requires token)
+- `gh` - Search using your custom alias (e.g., if you set "gh" as an alias for "your-github-repository-with-a-long-name")
 
 ## Rate Limiting
 

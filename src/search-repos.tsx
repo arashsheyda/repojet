@@ -1,12 +1,13 @@
 import { List, getPreferenceValues, LocalStorage } from "@raycast/api";
 import { useEffect, useState } from "react";
 
-import type { PreferencesState } from "./types";
+import type { RepoAlias } from "./types";
 import { checkTokenScopes, useGithubRepos } from "./api/github";
 import RepositoryListItem from "./components/RepositoryListItem";
 import ConfigurationRequired from "./components/ConfigurationRequired";
 import InvalidToken from "./components/InvalidToken";
 import EmptyScreen from "./components/EmptyScreen";
+import { loadAliases, setAlias, removeAlias, getMatchingReposByAlias } from "./utils/aliases";
 
 export default function SearchRepositories() {
   const [searchText, setSearchText] = useState("");
@@ -15,8 +16,9 @@ export default function SearchRepositories() {
   const [bookmarkedRepos, setBookmarkedRepos] = useState<Set<number>>(
     new Set(),
   );
+  const [aliases, setAliases] = useState<Map<number, RepoAlias>>(new Map());
 
-  const preferences = getPreferenceValues<PreferencesState>();
+  const preferences = getPreferenceValues<Preferences>();
 
   const orgs = preferences.organizations
     .split(",")
@@ -39,6 +41,15 @@ export default function SearchRepositories() {
     loadBookmarks();
   }, []);
 
+  // Load aliases from LocalStorage on mount
+  useEffect(() => {
+    async function loadRepoAliases() {
+      const aliasMap = await loadAliases();
+      setAliases(aliasMap);
+    }
+    loadRepoAliases();
+  }, []);
+
   // Check token validity on mount
   useEffect(() => {
     async function validateToken() {
@@ -56,6 +67,7 @@ export default function SearchRepositories() {
   const { repositories, isLoading, error } = useGithubRepos(
     searchText,
     preferences,
+    aliases,
   );
 
   const toggleBookmark = async (repoId: number) => {
@@ -72,12 +84,36 @@ export default function SearchRepositories() {
     );
   };
 
-  // Sort repositories: bookmarked ones first, then by stars
+  const handleSetAlias = async (repoId: number, repoFullName: string, alias: string) => {
+    await setAlias(repoId, repoFullName, alias);
+    const updatedAliases = await loadAliases();
+    setAliases(updatedAliases);
+  };
+
+  const handleRemoveAlias = async (repoId: number) => {
+    await removeAlias(repoId);
+    const updatedAliases = await loadAliases();
+    setAliases(updatedAliases);
+  };
+
+  // Get repos that match by alias
+  const aliasMatchedRepoIds = getMatchingReposByAlias(searchText, aliases);
+
+  // Sort repositories: bookmarked ones first, then alias matches, then by stars
   const sortedRepositories = [...repositories].sort((a, b) => {
     const aBookmarked = bookmarkedRepos.has(a.id);
     const bBookmarked = bookmarkedRepos.has(b.id);
+    const aAliasMatch = aliasMatchedRepoIds.has(a.id);
+    const bAliasMatch = aliasMatchedRepoIds.has(b.id);
+    
+    // Bookmarked repos come first
     if (aBookmarked && !bBookmarked) return -1;
     if (!aBookmarked && bBookmarked) return 1;
+    
+    // Then alias matches (only if searching)
+    if (searchText.trim() && aAliasMatch && !bAliasMatch) return -1;
+    if (searchText.trim() && !aAliasMatch && bAliasMatch) return 1;
+    
     return 0; // Keep original order (already sorted by stars from API)
   });
 
@@ -115,6 +151,9 @@ export default function SearchRepositories() {
             isBookmarked={bookmarkedRepos.has(repo.id)}
             onToggleBookmark={toggleBookmark}
             cloneDirectory={preferences.cloneDirectory}
+            alias={aliases.get(repo.id)?.alias}
+            onSetAlias={handleSetAlias}
+            onRemoveAlias={handleRemoveAlias}
           />
         ))
       )}
