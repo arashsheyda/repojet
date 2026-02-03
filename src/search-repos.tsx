@@ -7,7 +7,12 @@ import RepositoryListItem from "./components/RepositoryListItem";
 import ConfigurationRequired from "./components/ConfigurationRequired";
 import InvalidToken from "./components/InvalidToken";
 import EmptyScreen from "./components/EmptyScreen";
-import { loadAliases, setAlias, removeAlias, getMatchingReposByAlias } from "./utils/aliases";
+import {
+  loadAliases,
+  setAlias,
+  removeAlias,
+  getMatchingReposByAlias,
+} from "./utils/aliases";
 
 export default function SearchRepositories() {
   const [searchText, setSearchText] = useState("");
@@ -84,7 +89,11 @@ export default function SearchRepositories() {
     );
   };
 
-  const handleSetAlias = async (repoId: number, repoFullName: string, alias: string) => {
+  const handleSetAlias = async (
+    repoId: number,
+    repoFullName: string,
+    alias: string,
+  ) => {
     await setAlias(repoId, repoFullName, alias);
     const updatedAliases = await loadAliases();
     setAliases(updatedAliases);
@@ -105,15 +114,15 @@ export default function SearchRepositories() {
     const bBookmarked = bookmarkedRepos.has(b.id);
     const aAliasMatch = aliasMatchedRepoIds.has(a.id);
     const bAliasMatch = aliasMatchedRepoIds.has(b.id);
-    
+
     // Bookmarked repos come first
     if (aBookmarked && !bBookmarked) return -1;
     if (!aBookmarked && bBookmarked) return 1;
-    
+
     // Then alias matches (only if searching)
     if (searchText.trim() && aAliasMatch && !bAliasMatch) return -1;
     if (searchText.trim() && !aAliasMatch && bAliasMatch) return 1;
-    
+
     return 0; // Keep original order (already sorted by stars from API)
   });
 

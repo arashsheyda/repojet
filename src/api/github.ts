@@ -39,9 +39,9 @@ export async function checkTokenScopes(
 }
 
 export function useGithubRepos(
-  query: string, 
+  query: string,
   preferences: Preferences,
-  aliases?: Map<number, RepoAlias>
+  aliases?: Map<number, RepoAlias>,
 ) {
   const orgs = preferences.organizations
     .split(",")
@@ -59,16 +59,18 @@ export function useGithubRepos(
     if (aliases) {
       const matchingRepoNames: string[] = [];
       const lowerQuery = trimmed.toLowerCase();
-      
+
       for (const aliasData of aliases.values()) {
         if (aliasData.alias.toLowerCase().includes(lowerQuery)) {
           matchingRepoNames.push(aliasData.repoFullName);
         }
       }
-      
+
       // If we found matching aliases, search for those repo names
       if (matchingRepoNames.length > 0) {
-        const repoQueries = matchingRepoNames.map(fullName => `repo:${fullName}`).join(' ');
+        const repoQueries = matchingRepoNames
+          .map((fullName) => `repo:${fullName}`)
+          .join(" ");
         return repoQueries;
       }
     }
