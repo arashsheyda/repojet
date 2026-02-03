@@ -6,6 +6,7 @@
   "description": "Search repositories across multiple GitHub organizations with custom aliases, bookmarks, and quick clone support.",
   "icon": "icon.png",
   "author": "arashsheyda",
+  "owner": "konghq",
   "categories": [
     "Developer Tools",
     "Productivity"
