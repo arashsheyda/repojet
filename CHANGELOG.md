@@ -1,4 +1,8 @@
 # RepoJet Changelog
+## [v0.1.1] - 2026-02-03
+
+* chore(docs): update image extensions (37bb7e4)
+
 ## [v0.1.0] - 2026-02-03
 
 * fix(ci): improve version detection logic (f80002f)
