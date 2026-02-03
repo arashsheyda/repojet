@@ -1,3 +1,36 @@
 # RepoJet Changelog
+## [v0.1.0] - 2026-02-03
+
+* fix(ci): improve version detection logic (f80002f)
+* feat: add github actions release workflow and update documentation (ab9ec50)
+* chore: lint (5f24e9e)
+* chore: update image size (7315fe2)
+* chore: move images to metadata (f199108)
+* feat: add repository aliasing feature with local storage support (a1b9ee9)
+* chore: add owner (1608b2d)
+* fix(api): improve query execution (4297abb)
+* chore: add public access (313a061)
+* refactor: switch to npm (9b657ea)
+* chore: update icon size (582ceea)
+* chore: update readme style (9ca7248)
+* chore: update docs (229b72c)
+* chore: update docs (efe04f6)
+* chore: update description (a67262a)
+* feat: rename project to RepoJet (f68f6a9)
+* chore: lint (5caf414)
+* chore: update docs (6dceb7a)
+* feat(actions): add clone repository (5631c9a)
+* feat: add bookmarking for repos (836afe1)
+* chore: update readme (0c4e49d)
+* chore: update readme (12eb1c8)
+* chore: reorder (09ec060)
+* chore: reorder (cb679ea)
+* chore: update readme (5c6cc50)
+* chore: add screenshots (9ed9b93)
+* feat: implement configuration and error handling components (e8e7ea1)
+* feat: enhance error handling in repository search results (5d3dd0e)
+* fix(ui): add color tint to repository privacy icons (fab768d)
+* initial commit (5e829aa)
+
 
 ## [Initial Version] - {PR_MERGE_DATE}

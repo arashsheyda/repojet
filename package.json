@@ -1,6 +1,6 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "name": "repojet",
   "title": "RepoJet",
   "description": "Search repositories across multiple GitHub organizations with custom aliases, bookmarks, and quick clone support.",
