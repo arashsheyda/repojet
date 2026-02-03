@@ -27,57 +27,57 @@ Search repositories across multiple GitHub organizations directly from Raycast.
       <em>RepoJet</em>
     </td>
     <td align="center" style="background-color: #23272D;">
-      <img src="metadata/raycast-commands-page.png" alt="Raycast Commands" /><br/>
+      <img src="metadata/raycast-commands-page.jpg" alt="Raycast Commands" /><br/>
       <em>Finding the extension</em>
     </td>
   </tr>
   <tr>
     <td align="center" style="background-color: #23272D;">
-      <img src="metadata/welcome-page.png" alt="Welcome Page" /><br/>
+      <img src="metadata/welcome-page.jpg" alt="Welcome Page" /><br/>
       <em>Initial setup</em>
     </td>
     <td align="center" style="background-color: #23272D;">
-      <img src="metadata/welcome-setup-page.png" alt="Welcome Setup Page" /><br/>
+      <img src="metadata/welcome-setup-page.jpg" alt="Welcome Setup Page" /><br/>
       <em>Configuration</em>
     </td>
   </tr>
   <tr>
     <td align="center" style="background-color: #23272D;">
-      <img src="metadata/repo-list-page.png" alt="Repository List" /><br/>
+      <img src="metadata/repo-list-page.jpg" alt="Repository List" /><br/>
       <em>Repository list</em>
     </td>
     <td align="center" style="background-color: #23272D;">
-      <img src="metadata/repo-list-searched-page.png" alt="Search Results" /><br/>
+      <img src="metadata/repo-list-searched-page.jpg" alt="Search Results" /><br/>
       <em>Search results</em>
     </td>
   </tr>
   <tr>
     <td align="center" style="background-color: #23272D;">
-      <img src="metadata/repo-list-page-bookmarked.png" alt="Bookmarked Repositories" /><br/>
+      <img src="metadata/repo-list-page-bookmarked.jpg" alt="Bookmarked Repositories" /><br/>
       <em>Bookmarked repos</em>
     </td>
     <td align="center" style="background-color: #23272D;">
-      <img src="metadata/repo-list-actions.png" alt="Repository Actions" /><br/>
+      <img src="metadata/repo-list-actions.jpg" alt="Repository Actions" /><br/>
       <em>Actions menu</em>
     </td>
   </tr>
   <tr>
     <td align="center" style="background-color: #23272D;">
-      <img src="metadata/repo-list-cloned.png" alt="Clone Repository" /><br/>
+      <img src="metadata/repo-list-cloned.jpg" alt="Clone Repository" /><br/>
       <em>Clone success</em>
     </td>
     <td align="center" style="background-color: #23272D;">
-      <img src="metadata/invalid-token-page.png" alt="Invalid Token Page" /><br/>
+      <img src="metadata/invalid-token-page.jpg" alt="Invalid Token Page" /><br/>
       <em>Invalid token</em>
     </td>
   </tr>
   <tr>
     <td align="center" style="background-color: #23272D;">
-      <img src="metadata/not-result.png" alt="No Results" /><br/>
+      <img src="metadata/not-result.jpg" alt="No Results" /><br/>
       <em>No results</em>
     </td>
     <td align="center" style="background-color: #23272D;">
-      <img src="metadata/error-page.png" alt="Error Page" /><br/>
+      <img src="metadata/error-page.jpg" alt="Error Page" /><br/>
       <em>Error state</em>
     </td>
   </tr>
