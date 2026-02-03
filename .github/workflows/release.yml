@@ -28,12 +28,19 @@ jobs:
         id: version
         run: |
           # Get the latest tag
-          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
-          echo "Latest tag: $LATEST_TAG"
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
           
-          # Get commits since last tag
-          COMMITS=$(git log $LATEST_TAG..HEAD --format=%s)
-          echo "Commits since last tag:"
+          if [ -z "$LATEST_TAG" ]; then
+            echo "No previous tags found, starting from v0.0.0"
+            CURRENT_VERSION="0.0.0"
+            COMMITS=$(git log --format=%s HEAD)
+          else
+            echo "Latest tag: $LATEST_TAG"
+            CURRENT_VERSION=${LATEST_TAG#v}
+            COMMITS=$(git log $LATEST_TAG..HEAD --format=%s)
+          fi
+          
+          echo "Commits since last release:"
           echo "$COMMITS"
           
           # Determine version bump type
@@ -50,7 +57,6 @@ jobs:
           echo "bump_type=$BUMP_TYPE" >> $GITHUB_OUTPUT
           
           # Calculate new version
-          CURRENT_VERSION=${LATEST_TAG#v}
           IFS='.' read -ra VERSION_PARTS <<< "$CURRENT_VERSION"
           MAJOR=${VERSION_PARTS[0]}
           MINOR=${VERSION_PARTS[1]}
