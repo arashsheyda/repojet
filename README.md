@@ -15,6 +15,7 @@ Search repositories across multiple GitHub organizations directly from Raycast.
 - [Authentication](#authentication)
 - [Example Queries](#example-queries)
 - [Rate Limiting](#rate-limiting)
+- [Releases](#releases)
 - [Troubleshooting](#troubleshooting)
 
 ## Screenshots
@@ -97,7 +98,36 @@ Search repositories across multiple GitHub organizations directly from Raycast.
 
 ### 1. Install the Extension
 
-The extension is located in the `raycast-extension` directory.
+**Option 1: Official Extension (Private)**
+
+This extension is currently available as a private extension at [https://www.raycast.com/konghq/repojet](https://www.raycast.com/konghq/repojet). If you have access, you can install it directly from the Raycast Store.
+
+**Option 2: Local Installation**
+
+For local development or if you don't have access to the private extension:
+
+1. Download the latest release from the [Releases page](https://github.com/arashsheyda/repojet/releases)
+2. Extract the downloaded archive
+3. In Raycast, use the "Import Extension" command
+4. Navigate to the extracted folder and select it
+5. The extension will be installed and ready to use
+
+**Option 3: Build from Source**
+
+```bash
+# Clone the repository
+git clone https://github.com/arashsheyda/repojet.git
+cd repojet
+
+# Install dependencies
+npm install
+
+# Build the extension
+npm run build
+
+# Import into Raycast
+# Use Raycast's "Import Extension" command and select this directory
+```
 
 ### 2. Configure GitHub Token (Optional but Recommended)
 
@@ -222,6 +252,22 @@ GitHub API has rate limits:
 - With token: 5,000 requests/hour
 
 The extension caches results, so repeated searches are instant.
+
+## Releases
+
+### Automatic Releases with Conventional Commits
+
+This project uses [Conventional Commits](https://www.conventionalcommits.org/) for automatic versioning and releases. When you push commits to the `main` branch, the release workflow automatically:
+
+1. Analyzes your commit messages
+2. Determines the appropriate version bump
+3. Updates `package.json`
+4. Creates a git tag
+5. Builds and publishes a GitHub release
+
+### Downloading Releases
+
+Visit the [Releases page](https://github.com/arashsheyda/repojet/releases) to download the latest version for local installation.
 
 ## Troubleshooting
 
