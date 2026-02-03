@@ -1,4 +1,8 @@
 # RepoJet Changelog
+## [v0.1.2] - 2026-02-03
+
+* chore: remove owner (de0361d)
+
 ## [v0.1.1] - 2026-02-03
 
 * chore(docs): update image extensions (37bb7e4)
