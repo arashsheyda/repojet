@@ -1,4 +1,8 @@
 # RepoJet Changelog
+## [v0.1.3] - 2026-02-03
+
+* chore: bring back konghq as owner (e44e86b)
+
 ## [v0.1.2] - 2026-02-03
 
 * chore: remove owner (de0361d)
