@@ -1,4 +1,8 @@
 # RepoJet Changelog
+## [v0.3.2] - 2026-02-04
+
+* fix: use execFile for cloning (8e2fb9d)
+
 ## [v0.3.1] - 2026-02-04
 
 * fix: update title to label for SSH clone preference (c52c05b)
