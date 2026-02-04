@@ -1,4 +1,8 @@
 # RepoJet Changelog
+## [v0.3.1] - 2026-02-04
+
+* fix: update title to label for SSH clone preference (c52c05b)
+
 ## [v0.3.0] - 2026-02-04
 
 * feat: add SSH/HTTPS toggle, remove recent, and improve code (d2f56fd)
