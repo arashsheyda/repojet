@@ -1,4 +1,8 @@
 # RepoJet Changelog
+## [v0.2.1] - 2026-02-04
+
+* fix: use raycast cached state util for better performance (6aaed1d)
+
 ## [v0.2.0] - 2026-02-04
 
 * feat: add recently opened repositories (d9b3034)
