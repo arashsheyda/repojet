@@ -72,10 +72,13 @@ export default function RepositoryListItem({
   isBookmarked,
   onToggleBookmark,
   cloneDirectory,
+  useSSH,
   alias,
   onSetAlias,
   onRemoveAlias,
   onRepoOpened,
+  onRemoveFromRecent,
+  isInRecentSection,
 }: RepositoryListItemProps) {
   const handleClone = async () => {
     onRepoOpened?.(repo.id);
@@ -92,8 +95,11 @@ export default function RepositoryListItem({
         : baseDir;
       const repoPath = join(cloneDir, repo.name);
 
+      // Use SSH or HTTPS URL based on preference
+      const cloneUrl = useSSH ? repo.ssh_url : repo.clone_url;
+
       // Clone the repository
-      await execAsync(`git clone "${repo.clone_url}" "${repoPath}"`);
+      await execAsync(`git clone "${cloneUrl}" "${repoPath}"`);
 
       toast.style = Toast.Style.Success;
       toast.title = "Repository cloned successfully";
@@ -162,18 +168,6 @@ export default function RepositoryListItem({
               onOpen={() => onRepoOpened?.(repo.id)}
             />
             <Action
-              title="Clone Repository"
-              icon={Icon.Download}
-              onAction={handleClone}
-              shortcut={{ modifiers: ["cmd"], key: "d" }}
-            />
-            <Action.CopyToClipboard content={repo.html_url} title="Copy URL" />
-            <Action.CopyToClipboard
-              content={repo.clone_url}
-              title="Copy Clone URL"
-              shortcut={{ modifiers: ["cmd", "shift"], key: "c" }}
-            />
-            <Action
               title={isBookmarked ? "Remove Bookmark" : "Add Bookmark"}
               icon={isBookmarked ? Icon.StarDisabled : Icon.Star}
               onAction={() => onToggleBookmark(repo.id)}
@@ -191,6 +185,30 @@ export default function RepositoryListItem({
                 />
               }
               shortcut={{ modifiers: ["cmd"], key: "l" }}
+            />
+            <Action
+              title="Clone Repository"
+              icon={Icon.Download}
+              onAction={handleClone}
+              shortcut={{ modifiers: ["cmd"], key: "d" }}
+            />
+            <Action.OpenInBrowser
+              title="Clone in VS Code"
+              icon={Icon.Code}
+              url={`vscode://vscode.git/clone?url=${encodeURIComponent(useSSH ? repo.ssh_url : repo.clone_url)}`}
+              shortcut={{ modifiers: ["cmd"], key: "o" }}
+              onOpen={() => onRepoOpened?.(repo.id)}
+            />
+            <Action.CopyToClipboard content={repo.html_url} title="Copy URL" />
+            <Action.CopyToClipboard
+              content={repo.clone_url}
+              title="Copy HTTPS Clone URL"
+              shortcut={{ modifiers: ["cmd", "shift"], key: "c" }}
+            />
+            <Action.CopyToClipboard
+              content={repo.ssh_url}
+              title="Copy SSH Clone URL"
+              shortcut={{ modifiers: ["cmd", "shift"], key: "s" }}
             />
             {alias && (
               <Action
@@ -210,6 +228,22 @@ export default function RepositoryListItem({
             )}
           </ActionPanel.Section>
           <ActionPanel.Section>
+            {isInRecentSection && onRemoveFromRecent && (
+              <Action
+                title="Remove from Recent"
+                icon={Icon.XMarkCircle}
+                style={Action.Style.Destructive}
+                onAction={async () => {
+                  onRemoveFromRecent(repo.id);
+                  await showToast({
+                    style: Toast.Style.Success,
+                    title: "Removed from recent",
+                    message: repo.name,
+                  });
+                }}
+                shortcut={{ modifiers: ["cmd", "shift"], key: "r" }}
+              />
+            )}
             <Action
               title="Open Preferences"
               onAction={openExtensionPreferences}

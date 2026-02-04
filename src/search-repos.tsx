@@ -1,6 +1,6 @@
-import { List, getPreferenceValues, LocalStorage } from "@raycast/api";
+import { List, getPreferenceValues } from "@raycast/api";
 import { useCachedState } from "@raycast/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 import type { RepoAlias, GithubRepository } from "./types";
 import { checkTokenScopes, useGithubRepos } from "./api/github";
@@ -8,6 +8,7 @@ import RepositoryListItem from "./components/RepositoryListItem";
 import ConfigurationRequired from "./components/ConfigurationRequired";
 import InvalidToken from "./components/InvalidToken";
 import EmptyScreen from "./components/EmptyScreen";
+import { MAX_RECENT_REPOS } from "./constants/config";
 import {
   loadAliases,
   setAlias,
@@ -19,11 +20,20 @@ export default function SearchRepositories() {
   const [searchText, setSearchText] = useState("");
   const [tokenValid, setTokenValid] = useState<boolean | null>(null);
   const [tokenScopes, setTokenScopes] = useState<string[]>([]);
-  const [bookmarkedRepos, setBookmarkedRepos] = useState<Set<number>>(
-    new Set(),
+  const [bookmarkedRepoIds, setBookmarkedRepoIds] = useCachedState<number[]>(
+    "bookmarked-repos",
+    [],
   );
   const [aliases, setAliases] = useState<Map<number, RepoAlias>>(new Map());
-  const [recentRepos, setRecentRepos] = useCachedState<GithubRepository[]>("recent-repos", []);
+  const [recentRepos, setRecentRepos] = useCachedState<GithubRepository[]>(
+    "recent-repos",
+    [],
+  );
+
+  const bookmarkedRepos = useMemo(
+    () => new Set(bookmarkedRepoIds),
+    [bookmarkedRepoIds],
+  );
 
   const preferences = getPreferenceValues<Preferences>();
 
@@ -31,22 +41,6 @@ export default function SearchRepositories() {
     .split(",")
     .map((org) => org.trim())
     .filter(Boolean);
-
-  // Load bookmarks from LocalStorage on mount
-  useEffect(() => {
-    async function loadBookmarks() {
-      const stored = await LocalStorage.getItem<string>("bookmarked-repos");
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored) as number[];
-          setBookmarkedRepos(new Set(parsed));
-        } catch {
-          // Invalid data, ignore
-        }
-      }
-    }
-    loadBookmarks();
-  }, []);
 
   // Load aliases from LocalStorage on mount
   useEffect(() => {
@@ -85,24 +79,22 @@ export default function SearchRepositories() {
 
     const updated = [repo, ...recentRepos.filter((r) => r.id !== repoId)].slice(
       0,
-      10,
-    ); // Keep only the last 10 opened repos
+      MAX_RECENT_REPOS,
+    );
 
     await setRecentRepos(updated);
   };
 
+  const removeFromRecent = async (repoId: number) => {
+    const updated = recentRepos.filter((r) => r.id !== repoId);
+    await setRecentRepos(updated);
+  };
+
   const toggleBookmark = async (repoId: number) => {
-    const newBookmarks = new Set(bookmarkedRepos);
-    if (newBookmarks.has(repoId)) {
-      newBookmarks.delete(repoId);
-    } else {
-      newBookmarks.add(repoId);
-    }
-    setBookmarkedRepos(newBookmarks);
-    await LocalStorage.setItem(
-      "bookmarked-repos",
-      JSON.stringify(Array.from(newBookmarks)),
-    );
+    const updated = bookmarkedRepos.has(repoId)
+      ? bookmarkedRepoIds.filter((id) => id !== repoId)
+      : [...bookmarkedRepoIds, repoId];
+    await setBookmarkedRepoIds(updated);
   };
 
   const handleSetAlias = async (
@@ -122,25 +114,32 @@ export default function SearchRepositories() {
   };
 
   // Get repos that match by alias
-  const aliasMatchedRepoIds = getMatchingReposByAlias(searchText, aliases);
+  const aliasMatchedRepoIds = useMemo(
+    () => getMatchingReposByAlias(searchText, aliases),
+    [searchText, aliases],
+  );
 
   // Sort repositories: bookmarked ones first, then alias matches, then by stars
-  const sortedRepositories = [...repositories].sort((a, b) => {
-    const aBookmarked = bookmarkedRepos.has(a.id);
-    const bBookmarked = bookmarkedRepos.has(b.id);
-    const aAliasMatch = aliasMatchedRepoIds.has(a.id);
-    const bAliasMatch = aliasMatchedRepoIds.has(b.id);
+  const sortedRepositories = useMemo(
+    () =>
+      [...repositories].sort((a, b) => {
+        const aBookmarked = bookmarkedRepos.has(a.id);
+        const bBookmarked = bookmarkedRepos.has(b.id);
+        const aAliasMatch = aliasMatchedRepoIds.has(a.id);
+        const bAliasMatch = aliasMatchedRepoIds.has(b.id);
 
-    // Bookmarked repos come first
-    if (aBookmarked && !bBookmarked) return -1;
-    if (!aBookmarked && bBookmarked) return 1;
+        // Bookmarked repos come first
+        if (aBookmarked && !bBookmarked) return -1;
+        if (!aBookmarked && bBookmarked) return 1;
 
-    // Then alias matches (only if searching)
-    if (searchText.trim() && aAliasMatch && !bAliasMatch) return -1;
-    if (searchText.trim() && !aAliasMatch && bAliasMatch) return 1;
+        // Then alias matches (only if searching)
+        if (searchText.trim() && aAliasMatch && !bAliasMatch) return -1;
+        if (searchText.trim() && !aAliasMatch && bAliasMatch) return 1;
 
-    return 0; // Keep original order (already sorted by stars from API)
-  });
+        return 0; // Keep original order (already sorted by stars from API)
+      }),
+    [repositories, bookmarkedRepos, aliasMatchedRepoIds, searchText],
+  );
 
   if (!preferences.githubToken || orgs.length === 0) {
     return (
@@ -169,7 +168,9 @@ export default function SearchRepositories() {
       {!searchText.trim() && recentRepos.length > 0 && (
         <List.Section title="Recently Opened">
           {recentRepos
-            .filter((repo) => repo && repo.id && repo.owner && repo.owner.avatar_url)
+            .filter(
+              (repo) => repo && repo.id && repo.owner && repo.owner.avatar_url,
+            )
             .map((repo) => (
               <RepositoryListItem
                 key={repo.id}
@@ -177,10 +178,13 @@ export default function SearchRepositories() {
                 isBookmarked={bookmarkedRepos.has(repo.id)}
                 onToggleBookmark={toggleBookmark}
                 cloneDirectory={preferences.cloneDirectory}
+                useSSH={preferences.useSSH}
                 alias={aliases.get(repo.id)?.alias}
                 onSetAlias={handleSetAlias}
                 onRemoveAlias={handleRemoveAlias}
                 onRepoOpened={trackRecentRepo}
+                onRemoveFromRecent={removeFromRecent}
+                isInRecentSection={true}
               />
             ))}
         </List.Section>
@@ -198,6 +202,7 @@ export default function SearchRepositories() {
               isBookmarked={bookmarkedRepos.has(repo.id)}
               onToggleBookmark={toggleBookmark}
               cloneDirectory={preferences.cloneDirectory}
+              useSSH={preferences.useSSH}
               alias={aliases.get(repo.id)?.alias}
               onSetAlias={handleSetAlias}
               onRemoveAlias={handleRemoveAlias}

@@ -1,5 +1,6 @@
 import { useFetch } from "@raycast/utils";
 import type { GithubRepository, RepoAlias } from "../types";
+import { DANGEROUS_SCOPES, API_PAGE_SIZE } from "../constants/config";
 
 /**
  * Checks the validity and scopes of a GitHub token.
@@ -24,13 +25,10 @@ export async function checkTokenScopes(
         .map((s) => s.trim()) || [];
 
     // Only allow tokens with repo scope and no dangerous write/admin scopes
-    const dangerousScopes = [
-      "delete_repo",
-      "workflow",
-      "admin:org",
-      "write:repo_hook",
-    ];
-    const hasDangerousScope = scopes.some((s) => dangerousScopes.includes(s));
+    const hasDangerousScope = scopes.some((s: string) =>
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      DANGEROUS_SCOPES.includes(s as any),
+    );
 
     return { valid: !hasDangerousScope, scopes };
   } catch {
@@ -84,7 +82,7 @@ export function useGithubRepos(
   const shouldExecute = Boolean(fullQuery && fullQuery.trim());
 
   const { data, isLoading, error } = useFetch<GithubRepository[]>(
-    `https://api.github.com/search/repositories?q=${encodeURIComponent(fullQuery)}&sort=stars&order=desc&per_page=30`,
+    `https://api.github.com/search/repositories?q=${encodeURIComponent(fullQuery)}&sort=stars&order=desc&per_page=${API_PAGE_SIZE}`,
     {
       execute: shouldExecute,
       headers: {

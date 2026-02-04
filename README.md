@@ -86,18 +86,24 @@ Search repositories across multiple GitHub organizations directly from Raycast.
 ## Features
 
 - **Search repositories** across multiple GitHub organizations
-- **Recently opened repositories** - quick access to repos you've recently viewed or cloned
-- **Bookmark repositories** to keep them at the top of your list
+- **Recently opened repositories** - quick access to repos you've recently viewed or cloned, with ability to remove items
+- **Bookmark repositories** to keep them at the top of your list (instant loading with caching)
 - **Repository aliases** - set custom short names for quick access (e.g., "gh" for "your-github-repository-with-a-long-name")
-- **Clone repositories** directly to your local machine with one command
+- **Clone repositories** directly to your local machine with SSH or HTTPS
+- **Clone in VS Code** - trigger VS Code's clone workflow with one command
+- **Enhanced metadata** - see stars, language, and last updated date at a glance
 - **Customizable clone directory** - choose where repos are cloned
+- **SSH/HTTPS toggle** - switch between SSH and HTTPS for cloning
 - Support for private repositories with GitHub Personal Access Token
 - Real-time search with instant results
 - Quick access to repository URLs and clone commands
+- **Optimized performance** - memoized sorting and cached state for faster loading
 
 ## Setup
 
 ### 1. Install the Extension
+
+**Platform Support**: This extension works on both macOS and Windows.
 
 **Option 1: Official Extension (Private)**
 
@@ -130,9 +136,9 @@ npm run build
 # Use Raycast's "Import Extension" command and select this directory
 ```
 
-### 2. Configure GitHub Token (Optional but Recommended)
+### 2. Configure GitHub Token (Required)
 
-To access private repositories and increase API rate limits:
+A GitHub Personal Access Token is required to use this extension. It provides access to both public and private repositories and increases API rate limits:
 
 1. Go to [GitHub Settings > Developer settings > Personal access tokens > Tokens (classic)](https://github.com/settings/tokens)
 2. Click "Generate new token (classic)"
@@ -161,9 +167,10 @@ To access private repositories and increase API rate limits:
 5. Paste your GitHub token in "GitHub Personal Access Token"
 6. Enter your organization names (comma-separated) in "GitHub Organizations"
    - Example: `myorg1, myorg2, personal-org`
-7. (Optional) Set your preferred "Clone Directory" for cloning repositories
-   - Default: `~/Developer`
-   - You can use paths like `~/Projects`, `~/Code`, or any absolute path
+7. Set your preferred "Clone Directory" for cloning repositories (default: `~/Developer`)
+   - You can customize this to paths like `~/Projects`, `~/Code`, or any absolute path
+   - The default value will be used if you don't specify a custom directory
+8. (Optional) Enable "Clone with SSH" to use SSH URLs instead of HTTPS for cloning
 
 ### 4. Start Searching
 
@@ -179,17 +186,21 @@ Search for repositories by name, description, or language!
    - Repository name and description
    - Star count
    - Programming language
+   - Last updated date
    - Privacy status (if private)
    - Bookmark indicator (yellow star) for bookmarked repos
    - Alias badge (purple tag) if you've set a custom alias
 6. Available actions:
    - **Enter** - Open repository in browser
+   - **⌘O** - Clone in VS Code (opens VS Code clone dialog)
    - **⌘D** - Clone repository to your configured directory
    - **⌘B** - Bookmark/unbookmark repository (bookmarked repos stay at the top)
    - **⌘L** - Set or edit repository alias
    - **⌘⇧L** - Remove repository alias
    - **⌘C** - Copy repository URL
-   - **⌘⇧C** - Copy git clone URL
+   - **⌘⇧C** - Copy HTTPS clone URL
+   - **⌘⇧S** - Copy SSH clone URL
+   - **⌘⇧R** - Remove from recent (when in Recently Opened section)
 
 ## Recently Opened Repositories
 
@@ -232,20 +243,23 @@ Aliases are stored locally and work offline. They complement bookmarks by provid
 
 ## Keyboard Shortcuts
 
+- **⌘O** - Clone in VS Code (opens clone dialog in VS Code)
 - **⌘D** - Clone repository to local machine
 - **⌘B** - Toggle bookmark (keeps repos at the top)
 - **⌘L** - Set or edit repository alias
 - **⌘⇧L** - Remove repository alias
 - **⌘C** - Copy repository URL
-- **⌘⇧C** - Copy git clone URL
+- **⌘⇧C** - Copy HTTPS clone URL
+- **⌘⇧S** - Copy SSH clone URL
+- **⌘⇧R** - Remove from recent (when in Recently Opened section)
 - **⌘,** - Open preferences
 
 ## Authentication
 
-The extension uses GitHub's REST API v3. Authentication is optional but recommended:
+The extension uses GitHub's REST API v3. A GitHub Personal Access Token is required to use this extension:
 
-- **Without token**: Limited to public repositories, 60 requests/hour
-- **With token (classic PAT)**: Access to private repositories, 5,000 requests/hour
+- **With token (classic PAT)**: Access to both public and private repositories, 5,000 requests/hour
+- **Note**: While the GitHub API allows unauthenticated access (60 requests/hour), this extension requires a token for optimal functionality and to ensure sufficient API rate limits
 
 ### Token Requirements
 - Must be a **Personal Access Token (classic)**

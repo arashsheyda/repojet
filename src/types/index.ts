@@ -10,10 +10,13 @@ export interface RepositoryListItemProps {
   isBookmarked: boolean;
   onToggleBookmark: (repoId: number) => void;
   cloneDirectory?: string;
+  useSSH?: boolean;
   alias?: string;
   onSetAlias: (repoId: number, repoFullName: string, alias: string) => void;
   onRemoveAlias: (repoId: number) => void;
   onRepoOpened?: (repoId: number) => void;
+  onRemoveFromRecent?: (repoId: number) => void;
+  isInRecentSection?: boolean;
 }
 
 // auto-generated from GitHub API response
