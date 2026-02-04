@@ -1,4 +1,5 @@
 import { List, getPreferenceValues, LocalStorage } from "@raycast/api";
+import { useCachedState } from "@raycast/utils";
 import { useEffect, useState } from "react";
 
 import type { RepoAlias, GithubRepository } from "./types";
@@ -22,7 +23,7 @@ export default function SearchRepositories() {
     new Set(),
   );
   const [aliases, setAliases] = useState<Map<number, RepoAlias>>(new Map());
-  const [recentRepos, setRecentRepos] = useState<GithubRepository[]>([]);
+  const [recentRepos, setRecentRepos] = useCachedState<GithubRepository[]>("recent-repos", []);
 
   const preferences = getPreferenceValues<Preferences>();
 
@@ -56,26 +57,6 @@ export default function SearchRepositories() {
     loadRepoAliases();
   }, []);
 
-  // Load recent repos from LocalStorage on mount
-  useEffect(() => {
-    async function loadRecentRepos() {
-      const stored = await LocalStorage.getItem<string>("recent-repos");
-      if (stored) {
-        try {
-          const parsed = JSON.parse(stored) as GithubRepository[];
-          // Filter out repos with missing required data
-          const validRepos = parsed.filter(
-            (repo) => repo && repo.id && repo.owner && repo.owner.avatar_url,
-          );
-          setRecentRepos(validRepos);
-        } catch {
-          // Invalid data, ignore
-        }
-      }
-    }
-    loadRecentRepos();
-  }, []);
-
   // Check token validity on mount
   useEffect(() => {
     async function validateToken() {
@@ -107,8 +88,7 @@ export default function SearchRepositories() {
       10,
     ); // Keep only the last 10 opened repos
 
-    setRecentRepos(updated);
-    await LocalStorage.setItem("recent-repos", JSON.stringify(updated));
+    await setRecentRepos(updated);
   };
 
   const toggleBookmark = async (repoId: number) => {
@@ -186,10 +166,10 @@ export default function SearchRepositories() {
       searchBarPlaceholder="Search repositories..."
       throttle
     >
-      {!searchText.trim() && recentRepos.length > 0 && !isLoading && (
+      {!searchText.trim() && recentRepos.length > 0 && (
         <List.Section title="Recently Opened">
           {recentRepos
-            .filter((repo) => repo && repo.owner)
+            .filter((repo) => repo && repo.id && repo.owner && repo.owner.avatar_url)
             .map((repo) => (
               <RepositoryListItem
                 key={repo.id}
