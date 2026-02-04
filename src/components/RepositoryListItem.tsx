@@ -14,12 +14,12 @@ import {
 } from "@raycast/api";
 import { homedir } from "os";
 import { join } from "path";
-import { exec } from "child_process";
+import { execFile } from "child_process";
 import { promisify } from "util";
 import { useState } from "react";
 import type { RepositoryListItemProps } from "../types";
 
-const execAsync = promisify(exec);
+const execFileAsync = promisify(execFile);
 
 function SetAliasForm({
   repoId,
@@ -98,8 +98,8 @@ export default function RepositoryListItem({
       // Use SSH or HTTPS URL based on preference
       const cloneUrl = useSSH ? repo.ssh_url : repo.clone_url;
 
-      // Clone the repository
-      await execAsync(`git clone "${cloneUrl}" "${repoPath}"`);
+      // Clone the repository using execFile to prevent command injection
+      await execFileAsync("git", ["clone", cloneUrl, repoPath]);
 
       toast.style = Toast.Style.Success;
       toast.title = "Repository cloned successfully";
