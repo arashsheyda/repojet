@@ -1,7 +1,7 @@
 import { List, getPreferenceValues, LocalStorage } from "@raycast/api";
 import { useEffect, useState } from "react";
 
-import type { RepoAlias } from "./types";
+import type { RepoAlias, GithubRepository } from "./types";
 import { checkTokenScopes, useGithubRepos } from "./api/github";
 import RepositoryListItem from "./components/RepositoryListItem";
 import ConfigurationRequired from "./components/ConfigurationRequired";
@@ -22,6 +22,7 @@ export default function SearchRepositories() {
     new Set(),
   );
   const [aliases, setAliases] = useState<Map<number, RepoAlias>>(new Map());
+  const [recentRepos, setRecentRepos] = useState<GithubRepository[]>([]);
 
   const preferences = getPreferenceValues<Preferences>();
 
@@ -55,6 +56,26 @@ export default function SearchRepositories() {
     loadRepoAliases();
   }, []);
 
+  // Load recent repos from LocalStorage on mount
+  useEffect(() => {
+    async function loadRecentRepos() {
+      const stored = await LocalStorage.getItem<string>("recent-repos");
+      if (stored) {
+        try {
+          const parsed = JSON.parse(stored) as GithubRepository[];
+          // Filter out repos with missing required data
+          const validRepos = parsed.filter(
+            (repo) => repo && repo.id && repo.owner && repo.owner.avatar_url,
+          );
+          setRecentRepos(validRepos);
+        } catch {
+          // Invalid data, ignore
+        }
+      }
+    }
+    loadRecentRepos();
+  }, []);
+
   // Check token validity on mount
   useEffect(() => {
     async function validateToken() {
@@ -74,6 +95,21 @@ export default function SearchRepositories() {
     preferences,
     aliases,
   );
+
+  const trackRecentRepo = async (repoId: number) => {
+    const repo =
+      repositories.find((r) => r.id === repoId) ||
+      recentRepos.find((r) => r.id === repoId);
+    if (!repo) return;
+
+    const updated = [repo, ...recentRepos.filter((r) => r.id !== repoId)].slice(
+      0,
+      10,
+    ); // Keep only the last 10 opened repos
+
+    setRecentRepos(updated);
+    await LocalStorage.setItem("recent-repos", JSON.stringify(updated));
+  };
 
   const toggleBookmark = async (repoId: number) => {
     const newBookmarks = new Set(bookmarkedRepos);
@@ -150,21 +186,45 @@ export default function SearchRepositories() {
       searchBarPlaceholder="Search repositories..."
       throttle
     >
-      {sortedRepositories.length === 0 && !isLoading ? (
+      {!searchText.trim() && recentRepos.length > 0 && !isLoading && (
+        <List.Section title="Recently Opened">
+          {recentRepos
+            .filter((repo) => repo && repo.owner)
+            .map((repo) => (
+              <RepositoryListItem
+                key={repo.id}
+                repo={repo}
+                isBookmarked={bookmarkedRepos.has(repo.id)}
+                onToggleBookmark={toggleBookmark}
+                cloneDirectory={preferences.cloneDirectory}
+                alias={aliases.get(repo.id)?.alias}
+                onSetAlias={handleSetAlias}
+                onRemoveAlias={handleRemoveAlias}
+                onRepoOpened={trackRecentRepo}
+              />
+            ))}
+        </List.Section>
+      )}
+      {sortedRepositories.length === 0 && !isLoading && searchText.trim() ? (
         <EmptyScreen error={error} hasSearchText={searchText.length > 0} />
       ) : (
-        sortedRepositories.map((repo) => (
-          <RepositoryListItem
-            key={repo.id}
-            repo={repo}
-            isBookmarked={bookmarkedRepos.has(repo.id)}
-            onToggleBookmark={toggleBookmark}
-            cloneDirectory={preferences.cloneDirectory}
-            alias={aliases.get(repo.id)?.alias}
-            onSetAlias={handleSetAlias}
-            onRemoveAlias={handleRemoveAlias}
-          />
-        ))
+        <List.Section
+          title={searchText.trim() ? "Search Results" : "All Repositories"}
+        >
+          {sortedRepositories.map((repo) => (
+            <RepositoryListItem
+              key={repo.id}
+              repo={repo}
+              isBookmarked={bookmarkedRepos.has(repo.id)}
+              onToggleBookmark={toggleBookmark}
+              cloneDirectory={preferences.cloneDirectory}
+              alias={aliases.get(repo.id)?.alias}
+              onSetAlias={handleSetAlias}
+              onRemoveAlias={handleRemoveAlias}
+              onRepoOpened={trackRecentRepo}
+            />
+          ))}
+        </List.Section>
       )}
     </List>
   );

@@ -75,8 +75,10 @@ export default function RepositoryListItem({
   alias,
   onSetAlias,
   onRemoveAlias,
+  onRepoOpened,
 }: RepositoryListItemProps) {
   const handleClone = async () => {
+    onRepoOpened?.(repo.id);
     const toast = await showToast({
       style: Toast.Style.Animated,
       title: "Cloning repository...",
@@ -154,7 +156,11 @@ export default function RepositoryListItem({
       actions={
         <ActionPanel>
           <ActionPanel.Section>
-            <Action.OpenInBrowser url={repo.html_url} title="Open in Browser" />
+            <Action.OpenInBrowser
+              url={repo.html_url}
+              title="Open in Browser"
+              onOpen={() => onRepoOpened?.(repo.id)}
+            />
             <Action
               title="Clone Repository"
               icon={Icon.Download}

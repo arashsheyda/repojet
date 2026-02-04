@@ -80,7 +80,7 @@ export function useGithubRepos(
 
   const fullQuery = buildQuery(query);
 
-  // Don't execute if query is empty or only whitespace
+  // Always execute to show recent repos, even when search is empty
   const shouldExecute = Boolean(fullQuery && fullQuery.trim());
 
   const { data, isLoading, error } = useFetch<GithubRepository[]>(

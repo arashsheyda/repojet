@@ -86,6 +86,7 @@ Search repositories across multiple GitHub organizations directly from Raycast.
 ## Features
 
 - **Search repositories** across multiple GitHub organizations
+- **Recently opened repositories** - quick access to repos you've recently viewed or cloned
 - **Bookmark repositories** to keep them at the top of your list
 - **Repository aliases** - set custom short names for quick access (e.g., "gh" for "your-github-repository-with-a-long-name")
 - **Clone repositories** directly to your local machine with one command
@@ -173,14 +174,15 @@ Search for repositories by name, description, or language!
 1. Open Raycast (default: `⌘Space`)
 2. Type "Search Repositories" and hit Enter
 3. Type to search (e.g., "react", "api", "database", or your custom aliases)
-4. Results show:
+4. When the search bar is empty, you'll see a "Recently Opened" section showing repositories you've accessed recently
+5. Results show:
    - Repository name and description
    - Star count
    - Programming language
    - Privacy status (if private)
    - Bookmark indicator (yellow star) for bookmarked repos
    - Alias badge (purple tag) if you've set a custom alias
-5. Available actions:
+6. Available actions:
    - **Enter** - Open repository in browser
    - **⌘D** - Clone repository to your configured directory
    - **⌘B** - Bookmark/unbookmark repository (bookmarked repos stay at the top)
@@ -188,6 +190,20 @@ Search for repositories by name, description, or language!
    - **⌘⇧L** - Remove repository alias
    - **⌘C** - Copy repository URL
    - **⌘⇧C** - Copy git clone URL
+
+## Recently Opened Repositories
+
+The extension automatically tracks repositories you interact with:
+
+- **Automatic tracking**: Repositories are added to the "Recently Opened" list when you:
+  - Open them in browser
+  - Clone them to your local machine
+- **Quick access**: When the search bar is empty, recently opened repos appear at the top
+- **Persistent history**: Your recent repositories are saved and available across sessions
+- **Limited to 10**: The extension keeps your 10 most recent repositories
+- **Most recent first**: The list is automatically sorted with the most recently accessed repos at the top
+
+This feature helps you quickly return to repositories you're actively working with, without needing to search or bookmark them.
 
 ## Repository Aliases
 

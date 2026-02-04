@@ -13,6 +13,7 @@ export interface RepositoryListItemProps {
   alias?: string;
   onSetAlias: (repoId: number, repoFullName: string, alias: string) => void;
   onRemoveAlias: (repoId: number) => void;
+  onRepoOpened?: (repoId: number) => void;
 }
 
 // auto-generated from GitHub API response
