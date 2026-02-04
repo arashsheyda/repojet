@@ -1,4 +1,8 @@
 # RepoJet Changelog
+## [v0.3.0] - 2026-02-04
+
+* feat: add SSH/HTTPS toggle, remove recent, and improve code (d2f56fd)
+
 ## [v0.2.1] - 2026-02-04
 
 * fix: use raycast cached state util for better performance (6aaed1d)
