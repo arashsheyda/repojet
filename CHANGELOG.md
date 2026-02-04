@@ -1,4 +1,8 @@
 # RepoJet Changelog
+## [v0.2.0] - 2026-02-04
+
+* feat: add recently opened repositories (d9b3034)
+
 ## [v0.1.3] - 2026-02-03
 
 * chore: bring back konghq as owner (e44e86b)
